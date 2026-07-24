@@ -1,0 +1,40 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  jobs      Job[]
+  createdAt DateTime @default(now())
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  company     String
+  position    String
+  status      Status   @default(APPLIED)
+  location    String?
+  salary      String?
+  notes       String?
+  appliedDate DateTime @default(now())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Status {
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
+}
