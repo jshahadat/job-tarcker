@@ -51,7 +51,7 @@ const config = {
     "clientVersion": "7.9.0",
     "engineVersion": "e922089b7d7502aff4249d5da3420f6fa55fc6ad",
     "activeProvider": "postgresql",
-    "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"esm\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  password  String\n  name      String\n  jobs      Job[]\n  createdAt DateTime @default(now())\n}\n\nmodel Job {\n  id          Int      @id @default(autoincrement())\n  company     String\n  position    String\n  status      Status   @default(APPLIED)\n  location    String?\n  salary      String?\n  notes       String?\n  appliedDate DateTime @default(now())\n  userId      Int\n  user        User     @relation(fields: [userId], references: [id])\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n\nenum Status {\n  APPLIED\n  INTERVIEW\n  OFFER\n  REJECTED\n}\n",
+    "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"commonjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  password  String\n  name      String\n  jobs      Job[]\n  createdAt DateTime @default(now())\n}\n\nmodel Job {\n  id          Int      @id @default(autoincrement())\n  company     String\n  position    String\n  status      Status   @default(APPLIED)\n  location    String?\n  salary      String?\n  notes       String?\n  appliedDate DateTime @default(now())\n  userId      Int\n  user        User     @relation(fields: [userId], references: [id])\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n\nenum Status {\n  APPLIED\n  INTERVIEW\n  OFFER\n  REJECTED\n}\n",
     "runtimeDataModel": {
         "models": {},
         "enums": {},
@@ -73,9 +73,9 @@ async function decodeBase64AsWasm(wasmBase64) {
     return new WebAssembly.Module(wasmArray);
 }
 config.compilerWasm = {
-    getRuntime: async () => await Promise.resolve().then(() => __importStar(require("@prisma/client/runtime/query_compiler_fast_bg.postgresql.mjs"))),
+    getRuntime: async () => await Promise.resolve().then(() => __importStar(require("@prisma/client/runtime/query_compiler_fast_bg.postgresql.js"))),
     getQueryCompilerWasmModule: async () => {
-        const { wasm } = await Promise.resolve().then(() => __importStar(require("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs")));
+        const { wasm } = await Promise.resolve().then(() => __importStar(require("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.js")));
         return await decodeBase64AsWasm(wasm);
     },
     importName: "./query_compiler_fast_bg.js"
